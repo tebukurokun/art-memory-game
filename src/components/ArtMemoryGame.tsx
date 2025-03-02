@@ -131,13 +131,12 @@ const ArtMemoryGame: React.FC = () => {
   };
 
   // 作者名を表示（デバッグ用またはヒント表示用）
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const getAuthorHint = (index: number): string => {
-    if (matchedPairs.includes(cards[index].author)) {
-      return cards[index].author;
-    }
-    return "";
-  };
+  // const getAuthorHint = (index: number): string => {
+  //   if (matchedPairs.includes(cards[index].author)) {
+  //     return cards[index].author;
+  //   }
+  //   return "";
+  // };
 
   return (
     <div className="flex flex-col items-center p-4 bg-gray-100 min-h-screen w-full">
