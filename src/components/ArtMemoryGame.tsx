@@ -131,6 +131,7 @@ const ArtMemoryGame: React.FC = () => {
   };
 
   // 作者名を表示（デバッグ用またはヒント表示用）
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getAuthorHint = (index: number): string => {
     if (matchedPairs.includes(cards[index].author)) {
       return cards[index].author;
