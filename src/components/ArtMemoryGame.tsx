@@ -1,39 +1,3 @@
-/**
- * ランダムに指定された数の画家を選び、各画家から2枚の作品を含むデータセットを作成
- */
-const selectRandomArtworks = (numPairs: number): Artwork[] => {
-  // 作家ごとに作品をグループ化
-  const artistGroups: { [key: string]: Artwork[] } = {};
-  allArtworkData.forEach((artwork) => {
-    if (!artistGroups[artwork.author]) {
-      artistGroups[artwork.author] = [];
-    }
-    artistGroups[artwork.author].push(artwork);
-  });
-
-  // 少なくとも2枚の作品がある画家のリストを作成
-  const eligibleArtists = Object.keys(artistGroups).filter(
-    (artist) => artistGroups[artist].length >= 2
-  );
-
-  // ランダムに画家を選ぶ
-  const selectedArtists = [...eligibleArtists]
-    .sort(() => Math.random() - 0.5)
-    .slice(0, numPairs);
-
-  // 各画家から2枚の作品を選ぶ
-  const selected: Artwork[] = [];
-  selectedArtists.forEach((artist) => {
-    // 画家の作品をランダムに並べ替えて最初の2枚を選択
-    const artistWorks = [...artistGroups[artist]]
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 2);
-    selected.push(...artistWorks);
-  });
-
-  return selected;
-};
-
 import React, { useEffect, useState } from "react";
 import { Artwork, allArtworkData } from "../data/artworkData";
 import { calculateConstrainedSize } from "../hooks/useImageSize";
@@ -49,11 +13,47 @@ const ArtMemoryGame: React.FC = () => {
   const [selectedArtworks, setSelectedArtworks] = useState<Artwork[]>([]);
   const [difficulty, setDifficulty] = useState<number>(6); // デフォルトは6ペア（12枚のカード）
 
-  // ゲームの初期化
-  useEffect(() => {
-    initializeGame(difficulty);
-  }, []);
+  // 拡大画像モーダルの状態
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<Artwork | null>(null);
 
+  /**
+   * ランダムに指定された数の画家を選び、各画家から2枚の作品を含むデータセットを作成
+   */
+  const selectRandomArtworks = (numPairs: number): Artwork[] => {
+    // 作家ごとに作品をグループ化
+    const artistGroups: { [key: string]: Artwork[] } = {};
+    allArtworkData.forEach((artwork) => {
+      if (!artistGroups[artwork.author]) {
+        artistGroups[artwork.author] = [];
+      }
+      artistGroups[artwork.author].push(artwork);
+    });
+
+    // 少なくとも2枚の作品がある画家のリストを作成
+    const eligibleArtists = Object.keys(artistGroups).filter(
+      (artist) => artistGroups[artist].length >= 2
+    );
+
+    // ランダムに画家を選ぶ
+    const selectedArtists = [...eligibleArtists]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, numPairs);
+
+    // 各画家から2枚の作品を選ぶ
+    const selected: Artwork[] = [];
+    selectedArtists.forEach((artist) => {
+      // 画家の作品をランダムに並べ替えて最初の2枚を選択
+      const artistWorks = [...artistGroups[artist]]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 2);
+      selected.push(...artistWorks);
+    });
+
+    return selected;
+  };
+
+  // ゲームの初期化
   const initializeGame = (numPairs: number = difficulty): void => {
     // ランダムに画家と作品を選択
     const selected = selectRandomArtworks(numPairs);
@@ -73,6 +73,22 @@ const ArtMemoryGame: React.FC = () => {
   const handleDifficultyChange = (newDifficulty: number): void => {
     setDifficulty(newDifficulty);
     initializeGame(newDifficulty);
+  };
+
+  // 画像クリックでモーダル表示
+  const handleImageClick = (e: React.MouseEvent, card: Artwork): void => {
+    // イベントの伝搬を停止して、カードクリックイベントが発火しないようにする
+    e.stopPropagation();
+    // モーダルに表示する画像を設定
+    setSelectedImage(card);
+    // モーダルを開く
+    setModalOpen(true);
+  };
+
+  // モーダルを閉じる
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setSelectedImage(null);
   };
 
   // カードをクリックした時の処理
@@ -130,13 +146,25 @@ const ArtMemoryGame: React.FC = () => {
     );
   };
 
-  // 作者名を表示（デバッグ用またはヒント表示用）
-  // const getAuthorHint = (index: number): string => {
-  //   if (matchedPairs.includes(cards[index].author)) {
-  //     return cards[index].author;
-  //   }
-  //   return "";
-  // };
+  // 初回レンダリング時にのみゲームを初期化
+  useEffect(() => {
+    initializeGame(difficulty);
+  }, []);
+
+  // ESCキーでモーダルを閉じる
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && modalOpen) {
+        closeModal();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [modalOpen]);
 
   return (
     <div className="flex flex-col items-center p-4 bg-gray-100 min-h-screen w-full">
@@ -240,8 +268,11 @@ const ArtMemoryGame: React.FC = () => {
                   <img
                     src={card.image}
                     alt={card.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover cursor-zoom-in"
                     title={`${card.title} by ${card.author}`}
+                    onClick={(e) =>
+                      isFlipped(index) && handleImageClick(e, card)
+                    }
                   />
                 </div>
 
@@ -281,11 +312,50 @@ const ArtMemoryGame: React.FC = () => {
             各カードは絵画の縦横比を維持し、最大サイズ内に収まるよう調整されています
           </li>
           <li>正解すると、作品のタイトルと画家名が表示されます</li>
+          <li>表示された絵画をクリックすると拡大表示できます</li>
           <li>マッチしたペアは表示されたままになります</li>
           <li>すべてのペアを見つけたらゲーム終了です</li>
           <li>なるべく少ないターン数でクリアを目指しましょう！</li>
         </ul>
       </div>
+
+      {/* 拡大画像モーダル */}
+      {modalOpen && selectedImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          onClick={closeModal}
+        >
+          <div
+            className="relative bg-white p-2 rounded-lg max-w-4xl max-h-[90vh] overflow-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center"
+              onClick={closeModal}
+            >
+              ×
+            </button>
+
+            <div className="p-4">
+              <img
+                src={selectedImage.image}
+                alt={selectedImage.title}
+                className="max-w-full max-h-[70vh] object-contain mx-auto"
+              />
+
+              {/* タイトルと画家名は正解した場合のみ表示 */}
+              {matchedPairs.includes(selectedImage.author) && (
+                <div className="mt-4 text-center">
+                  <h3 className="text-xl font-bold">{selectedImage.title}</h3>
+                  <p className="text-lg text-gray-600">
+                    {selectedImage.author}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
