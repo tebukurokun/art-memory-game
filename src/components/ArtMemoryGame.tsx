@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Artwork, allArtworkData } from "../data/artworkData";
 import { calculateConstrainedSize } from "../hooks/useImageSize";
+import { ImageModal } from "./ImageModal";
 
 const ArtMemoryGame: React.FC = () => {
   // ゲームの状態
@@ -320,42 +321,14 @@ const ArtMemoryGame: React.FC = () => {
       </div>
 
       {/* 拡大画像モーダル */}
-      {modalOpen && selectedImage && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
-          onClick={closeModal}
-        >
-          <div
-            className="relative bg-white p-2 rounded-lg max-w-4xl max-h-[90vh] overflow-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center"
-              onClick={closeModal}
-            >
-              ×
-            </button>
-
-            <div className="p-4">
-              <img
-                src={selectedImage.image}
-                alt={selectedImage.title}
-                className="max-w-full max-h-[70vh] object-contain mx-auto"
-              />
-
-              {/* タイトルと画家名は正解した場合のみ表示 */}
-              {matchedPairs.includes(selectedImage.author) && (
-                <div className="mt-4 text-center">
-                  <h3 className="text-xl font-bold">{selectedImage.title}</h3>
-                  <p className="text-lg text-gray-600">
-                    {selectedImage.author}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      <ImageModal
+        isOpen={modalOpen}
+        image={selectedImage}
+        isMatched={
+          selectedImage ? matchedPairs.includes(selectedImage.author) : false
+        }
+        onClose={closeModal}
+      />
     </div>
   );
 };
