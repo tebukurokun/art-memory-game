@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Artwork, allArtworkData } from "../data/artworkData";
+import { allArtworkData } from "../data/artworkData";
 import { calculateConstrainedSize } from "../hooks/useImageSize";
+import { Artwork } from "../types";
 import { ImageModal } from "./ImageModal";
 
 const ArtMemoryGame: React.FC = () => {
