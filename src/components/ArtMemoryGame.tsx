@@ -36,79 +36,100 @@ const ArtMemoryGame: React.FC = () => {
   }, [modalImage, closeModal]);
 
   return (
-    <div className="flex flex-col items-center p-4 bg-gray-100 min-h-screen w-full">
-      <h1 className="text-3xl font-bold mb-4">絵画神経衰弱</h1>
+    <div className="min-h-screen w-full bg-[#f4f1ea] text-stone-900">
+      <main className="mx-auto flex w-full max-w-7xl flex-col items-center px-4 py-6 sm:px-6 lg:px-8">
+        <header className="mb-6 w-full border-b border-stone-300/80 pb-5">
+          <p className="text-xs font-semibold tracking-[0.18em] text-stone-500">
+            ART MEMORY GAME
+          </p>
+          <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-stone-950 sm:text-4xl">
+                絵画神経衰弱
+              </h1>
+              <p className="mt-2 text-sm leading-6 text-stone-600 sm:text-base">
+                作者でそろえる、静かな展示室のカードゲーム
+              </p>
+            </div>
+            <p className="text-sm text-stone-500">
+              作品を開き、同じ画家のペアを見つけます
+            </p>
+          </div>
+        </header>
 
-      <div className="mb-6 flex flex-wrap gap-4 justify-center w-full max-w-6xl">
-        <StatusBar
-          turns={game.turns}
-          elapsedMs={game.elapsedMs}
-          matchedCount={game.matchedPairs.length}
-          totalPairs={game.totalPairs}
-          bestRecord={game.bestScores[difficulty]}
+        <section className="mb-6 flex w-full max-w-6xl flex-col gap-3 rounded border border-stone-300/80 bg-white/70 p-3 shadow-[0_18px_50px_rgba(68,64,60,0.10)] backdrop-blur sm:p-4 lg:flex-row lg:items-stretch lg:justify-between">
+          <StatusBar
+            turns={game.turns}
+            elapsedMs={game.elapsedMs}
+            matchedCount={game.matchedPairs.length}
+            totalPairs={game.totalPairs}
+            bestRecord={game.bestScores[difficulty]}
+          />
+          <Controls
+            difficulty={difficulty}
+            onDifficultyChange={setDifficulty}
+            onNewGame={game.resetGame}
+          />
+        </section>
+
+        {game.lastMatch && (
+          <MatchToast key={game.lastMatch} author={game.lastMatch} />
+        )}
+
+        {game.gameOver && (
+          <WinBanner
+            turns={game.turns}
+            elapsedMs={game.elapsedMs}
+            newRecord={game.newRecord}
+          />
+        )}
+
+        <section className="w-full border-t border-stone-300/80 pt-6">
+          <div className="grid w-full grid-cols-2 gap-x-3 gap-y-8 px-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+            {game.cards.map((card, index) => {
+              const flipped = game.isFlipped(index);
+              const matched = game.isMatched(index);
+              const isJustMatched =
+                game.feedback?.type === "match" &&
+                game.feedback.indexes.includes(index);
+              const isJustMismatched =
+                game.feedback?.type === "mismatch" &&
+                game.feedback.indexes.includes(index);
+
+              const onActivate = () => {
+                if (flipped) {
+                  setModalImage(card);
+                } else {
+                  game.handleCardClick(index);
+                }
+              };
+
+              return (
+                <Card
+                  key={card.id}
+                  card={card}
+                  isFlipped={flipped}
+                  isMatched={matched}
+                  isJustMatched={isJustMatched}
+                  isJustMismatched={isJustMismatched}
+                  onActivate={onActivate}
+                />
+              );
+            })}
+          </div>
+        </section>
+
+        <GameInstructions />
+
+        <ImageModal
+          isOpen={modalImage !== null}
+          image={modalImage}
+          isMatched={
+            modalImage ? game.matchedPairs.includes(modalImage.author) : false
+          }
+          onClose={closeModal}
         />
-        <Controls
-          difficulty={difficulty}
-          onDifficultyChange={setDifficulty}
-          onNewGame={game.resetGame}
-        />
-      </div>
-
-      {game.lastMatch && (
-        <MatchToast key={game.lastMatch} author={game.lastMatch} />
-      )}
-
-      {game.gameOver && (
-        <WinBanner
-          turns={game.turns}
-          elapsedMs={game.elapsedMs}
-          newRecord={game.newRecord}
-        />
-      )}
-
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 w-full px-2">
-        {game.cards.map((card, index) => {
-          const flipped = game.isFlipped(index);
-          const matched = game.isMatched(index);
-          const isJustMatched =
-            game.feedback?.type === "match" &&
-            game.feedback.indexes.includes(index);
-          const isJustMismatched =
-            game.feedback?.type === "mismatch" &&
-            game.feedback.indexes.includes(index);
-
-          const onActivate = () => {
-            if (flipped) {
-              setModalImage(card);
-            } else {
-              game.handleCardClick(index);
-            }
-          };
-
-          return (
-            <Card
-              key={card.id}
-              card={card}
-              isFlipped={flipped}
-              isMatched={matched}
-              isJustMatched={isJustMatched}
-              isJustMismatched={isJustMismatched}
-              onActivate={onActivate}
-            />
-          );
-        })}
-      </div>
-
-      <GameInstructions />
-
-      <ImageModal
-        isOpen={modalImage !== null}
-        image={modalImage}
-        isMatched={
-          modalImage ? game.matchedPairs.includes(modalImage.author) : false
-        }
-        onClose={closeModal}
-      />
+      </main>
     </div>
   );
 };

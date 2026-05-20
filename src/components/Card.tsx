@@ -37,12 +37,12 @@ export const Card: React.FC<CardProps> = ({
   };
 
   return (
-    <div className="cursor-pointer mb-8 flex flex-col items-center mx-auto w-full min-w-0">
+    <div className="mx-auto flex w-full min-w-0 cursor-pointer flex-col items-center">
       <button
         type="button"
         onClick={onActivate}
-        className={`perspective-1000 p-0 m-0 border-0 bg-transparent appearance-none max-w-full transition-transform duration-200 ${
-          !isFlipped ? "hover:-translate-y-1" : ""
+        className={`perspective-1000 m-0 max-w-full appearance-none border-0 bg-transparent p-0 transition-transform duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-700 focus-visible:ring-offset-4 focus-visible:ring-offset-[#f4f1ea] ${
+          !isFlipped ? "hover:-translate-y-1" : "hover:scale-[1.01]"
         }`}
       >
         <div
@@ -57,18 +57,21 @@ export const Card: React.FC<CardProps> = ({
             }`}
           >
             {/* 裏側（？マーク） */}
-            <div className="absolute inset-0 backface-hidden flex items-center justify-center bg-blue-500 text-white font-bold rounded-lg shadow-md">
-              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-blue-500">
+            <div className="absolute inset-0 backface-hidden flex items-center justify-center overflow-hidden rounded border border-stone-700 bg-[#1f1a17] p-3 text-stone-100 shadow-[0_16px_34px_rgba(68,64,60,0.22)]">
+              <div className="absolute inset-[9px] border border-stone-100/40" />
+              <div className="absolute inset-x-5 top-5 h-px bg-stone-100/35" />
+              <div className="absolute inset-x-5 bottom-5 h-px bg-stone-100/35" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-stone-100/60 bg-[#2b241f] text-2xl font-semibold">
                 ?
               </div>
             </div>
 
             {/* 表側（絵画）— 180°事前回転で裏面に貼り付け */}
-            <div className="absolute inset-0 backface-hidden rotateY-180 flex items-center justify-center border-2 rounded-lg overflow-hidden bg-white shadow-md">
+            <div className="absolute inset-0 backface-hidden rotateY-180 flex items-center justify-center overflow-hidden rounded border border-stone-300 bg-white p-2 shadow-[0_16px_34px_rgba(68,64,60,0.18)]">
               <img
                 src={card.image}
                 alt={card.title}
-                className="w-full h-full object-cover cursor-zoom-in"
+                className="h-full w-full cursor-zoom-in object-cover"
                 title={`${card.title} by ${card.author}`}
               />
             </div>
@@ -77,11 +80,11 @@ export const Card: React.FC<CardProps> = ({
       </button>
 
       {isMatched && (
-        <div className="text-center mt-4 w-full max-w-full px-2">
-          <p className="text-sm font-medium text-gray-900 break-words hyphens-auto overflow-hidden">
+        <div className="mt-3 w-full max-w-full px-2 text-center">
+          <p className="overflow-hidden break-words text-sm font-semibold leading-5 text-stone-900 hyphens-auto">
             {card.title}
           </p>
-          <p className="text-xs text-gray-600 mt-1">by {card.author}</p>
+          <p className="mt-1 text-xs text-stone-500">by {card.author}</p>
         </div>
       )}
     </div>

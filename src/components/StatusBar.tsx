@@ -17,41 +17,40 @@ export const StatusBar: React.FC<StatusBarProps> = ({
   bestRecord,
 }) => {
   return (
-    <>
-      <div className="bg-white px-4 py-2 rounded-lg shadow">
-        <p className="text-lg font-medium">
-          ターン数: <span className="text-blue-600 font-bold">{turns}</span>
+    <div className="grid flex-1 grid-cols-2 gap-2 md:grid-cols-4">
+      <div className="rounded border border-stone-300 bg-stone-50 px-3 py-2">
+        <p className="text-xs font-semibold text-stone-500">ターン数</p>
+        <p className="mt-1 text-xl font-bold tabular-nums text-stone-950">
+          {turns}
         </p>
       </div>
 
-      <div className="bg-white px-4 py-2 rounded-lg shadow">
-        <p className="text-lg font-medium">
-          タイム:{" "}
-          <span className="text-purple-600 font-bold tabular-nums">
-            {formatTime(elapsedMs)}
-          </span>
+      <div className="rounded border border-stone-300 bg-stone-50 px-3 py-2">
+        <p className="text-xs font-semibold text-stone-500">タイム</p>
+        <p className="mt-1 text-xl font-bold tabular-nums text-stone-950">
+          {formatTime(elapsedMs)}
         </p>
       </div>
 
-      <div className="bg-white px-4 py-2 rounded-lg shadow">
-        <p className="text-lg font-medium">
-          マッチ:{" "}
-          <span className="text-green-600 font-bold">
-            {matchedCount}/{totalPairs}
-          </span>
+      <div className="rounded border border-stone-300 bg-stone-50 px-3 py-2">
+        <p className="text-xs font-semibold text-stone-500">マッチ</p>
+        <p className="mt-1 text-xl font-bold tabular-nums text-stone-950">
+          {matchedCount}/{totalPairs}
         </p>
       </div>
 
-      {bestRecord && (
-        <div className="bg-white px-4 py-2 rounded-lg shadow">
-          <p className="text-lg font-medium">
-            最高:{" "}
-            <span className="text-amber-600 font-bold tabular-nums">
-              {bestRecord.turns}ターン / {formatTime(bestRecord.ms)}
-            </span>
+      <div className="rounded border border-stone-300 bg-stone-50 px-3 py-2">
+        <p className="text-xs font-semibold text-stone-500">最高記録</p>
+        {bestRecord ? (
+          <p className="mt-1 text-base font-bold tabular-nums text-stone-950 sm:text-lg">
+            {bestRecord.turns}ターン / {formatTime(bestRecord.ms)}
           </p>
-        </div>
-      )}
-    </>
+        ) : (
+          <p className="mt-1 text-base font-semibold text-stone-400 sm:text-lg">
+            未記録
+          </p>
+        )}
+      </div>
+    </div>
   );
 };
