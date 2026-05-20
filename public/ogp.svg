@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">絵画神経衰弱</title>
+  <desc id="desc">同じ作者の絵画をペアにして当てるブラウザゲームの共有画像</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f8fafc" />
+      <stop offset="0.58" stop-color="#e5e7eb" />
+      <stop offset="1" stop-color="#d1d5db" />
+    </linearGradient>
+    <filter id="shadow" color-interpolation-filters="sRGB" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#111827" flood-opacity="0.18" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect x="44" y="44" width="1112" height="542" rx="34" fill="#ffffff" opacity="0.72" />
+
+  <g transform="translate(80 86)">
+    <text x="0" y="72" font-family="Hiragino Sans, Yu Gothic, Noto Sans CJK JP, sans-serif" font-size="66" font-weight="800" fill="#111827">絵画神経衰弱</text>
+    <text x="4" y="126" font-family="Hiragino Sans, Yu Gothic, Noto Sans CJK JP, sans-serif" font-size="27" font-weight="600" fill="#374151">作者でそろえる絵画カードゲーム</text>
+    <g transform="translate(4 178)">
+      <rect x="0" y="0" width="316" height="54" rx="27" fill="#111827" />
+      <text x="158" y="36" text-anchor="middle" font-family="Hiragino Sans, Yu Gothic, Noto Sans CJK JP, sans-serif" font-size="24" font-weight="700" fill="#f9fafb">記憶力と美術鑑賞</text>
+    </g>
+  </g>
+
+  <g filter="url(#shadow)" transform="translate(602 80)">
+    <g transform="rotate(-8 96 130)">
+      <rect width="186" height="246" rx="18" fill="#111827" />
+      <rect x="12" y="12" width="162" height="222" rx="12" fill="#f9fafb" />
+      <image href="images/monet_impression-thumb.webp" x="23" y="28" width="140" height="140" preserveAspectRatio="xMidYMid slice" />
+      <rect x="26" y="188" width="132" height="14" rx="7" fill="#cbd5e1" />
+      <rect x="46" y="212" width="92" height="10" rx="5" fill="#e5e7eb" />
+    </g>
+    <g transform="translate(166 16) rotate(5 96 130)">
+      <rect width="186" height="246" rx="18" fill="#111827" />
+      <rect x="12" y="12" width="162" height="222" rx="12" fill="#f9fafb" />
+      <image href="images/gogh_starry_night-thumb.webp" x="23" y="28" width="140" height="140" preserveAspectRatio="xMidYMid slice" />
+      <rect x="26" y="188" width="132" height="14" rx="7" fill="#cbd5e1" />
+      <rect x="46" y="212" width="92" height="10" rx="5" fill="#e5e7eb" />
+    </g>
+    <g transform="translate(326 0) rotate(-3 96 130)">
+      <rect width="186" height="246" rx="18" fill="#111827" />
+      <rect x="12" y="12" width="162" height="222" rx="12" fill="#f9fafb" />
+      <image href="images/hokusai_wave-thumb.webp" x="23" y="28" width="140" height="140" preserveAspectRatio="xMidYMid slice" />
+      <rect x="26" y="188" width="132" height="14" rx="7" fill="#cbd5e1" />
+      <rect x="46" y="212" width="92" height="10" rx="5" fill="#e5e7eb" />
+    </g>
+    <g transform="translate(86 244) rotate(4 96 130)">
+      <rect width="186" height="246" rx="18" fill="#111827" />
+      <rect x="12" y="12" width="162" height="222" rx="12" fill="#f9fafb" />
+      <image href="images/vermeer_girl_pearl-thumb.webp" x="23" y="28" width="140" height="140" preserveAspectRatio="xMidYMid slice" />
+      <rect x="26" y="188" width="132" height="14" rx="7" fill="#cbd5e1" />
+      <rect x="46" y="212" width="92" height="10" rx="5" fill="#e5e7eb" />
+    </g>
+    <g transform="translate(252 246) rotate(-6 96 130)">
+      <rect width="186" height="246" rx="18" fill="#111827" />
+      <rect x="12" y="12" width="162" height="222" rx="12" fill="#f9fafb" />
+      <image href="images/raffaello_atene-thumb.webp" x="23" y="28" width="140" height="140" preserveAspectRatio="xMidYMid slice" />
+      <rect x="26" y="188" width="132" height="14" rx="7" fill="#cbd5e1" />
+      <rect x="46" y="212" width="92" height="10" rx="5" fill="#e5e7eb" />
+    </g>
+  </g>
+</svg>
