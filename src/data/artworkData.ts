@@ -335,4 +335,33 @@ export const allArtworkData: Artwork[] = [
     originalWidth: 3990,
     originalHeight: 4913,
   },
+
+  // 上村松園の作品 - 近代日本画、美人画
+  {
+    id: 39,
+    author: "上村松園",
+    title: "花がたみ",
+    image: "/images/uemura_hanagatami.webp",
+    thumbnailImage: "/images/uemura_hanagatami-thumb.webp",
+    originalWidth: 2566,
+    originalHeight: 4096,
+  },
+  {
+    id: 40,
+    author: "上村松園",
+    title: "焔",
+    image: "/images/uemura_hono.webp",
+    thumbnailImage: "/images/uemura_hono-thumb.webp",
+    originalWidth: 1436,
+    originalHeight: 3000,
+  },
+  {
+    id: 41,
+    author: "上村松園",
+    title: "序の舞",
+    image: "/images/uemura_jo_no_mai.webp",
+    thumbnailImage: "/images/uemura_jo_no_mai-thumb.webp",
+    originalWidth: 2485,
+    originalHeight: 4096,
+  },
 ];

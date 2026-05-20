@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // public/images/ にある画像を WebP に変換し、artworkData.ts に未登録のものは
-// エントリ雛形を標準出力に出す。jpg/jpeg/png → .webp と -thumb.webp を生成する。
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+// エントリ雛形を標準出力に出す。jpg/jpeg/png → .webp と -thumb.webp を生成し、
+// 変換後の元ファイルは削除する。
+import { existsSync, readdirSync, readFileSync, unlinkSync } from "node:fs";
 import { basename, extname, join } from "node:path";
 import sharp from "sharp";
 
@@ -34,6 +35,10 @@ for (const src of sources) {
       .resize(THUMB_MAX, THUMB_MAX, { fit: "inside", withoutEnlargement: true })
       .webp({ quality: THUMB_QUALITY })
       .toFile(thumbPath);
+  }
+  if (existsSync(webpPath) && existsSync(thumbPath)) {
+    console.log(`Removing source ${src}`);
+    unlinkSync(srcPath);
   }
 }
 

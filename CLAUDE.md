@@ -47,9 +47,28 @@ Use the Fisher–Yates `shuffle` in `src/utils/shuffle.ts`. The file's leading c
 
 ## Images
 
-Source images live in `public/images/` and are referenced by absolute paths like `/images/foo.webp`. Each `Artwork` needs both a full-size and a `-thumb` variant.
+Images live in `public/images/` and are referenced by absolute paths like `/images/foo.webp`. Each `Artwork` needs both a full-size WebP and a `-thumb.webp` variant.
 
-`npm run process-images` (script in `scripts/process-images.mjs`, uses `sharp`) does both jobs: converts any new `.jpg/.jpeg/.png` in `public/images/` to WebP (q80) + a `-thumb.webp` variant (max 200×200, q60), then scans `artworkData.ts` and prints ready-to-paste entry templates for any WebP that isn't yet registered. Width/height are read from the image; `author` and `title` come out as `"TODO"` for you to fill in. Conversion is idempotent — existing WebPs are skipped. `Card.tsx` uses `originalWidth`/`originalHeight` to preserve aspect ratio when fitting into a 220×180 box.
+`npm run process-images` (script in `scripts/process-images.mjs`, uses `sharp`) does both jobs: converts any new `.jpg/.jpeg/.png` in `public/images/` to WebP (q80) + a `-thumb.webp` variant (max 200×200, q60), deletes the source `.jpg/.jpeg/.png` after both WebP files exist, then scans `artworkData.ts` and prints ready-to-paste entry templates for any WebP that isn't yet registered. Width/height are read from the WebP; `author` and `title` come out as `"TODO"` for you to fill in. Conversion is idempotent — existing WebPs are skipped, but matching source files are still removed. `Card.tsx` uses `originalWidth`/`originalHeight` to preserve aspect ratio when fitting into a 220×180 box.
+
+### Adding new artwork (Wikipedia → process-images → artworkData.ts)
+
+Standard workflow when adding paintings. Only use sources that are **public domain** (artist died before ~1955, depending on jurisdiction) — works under copyright (Picasso, Dalí, etc.) must not be added.
+
+1. **Find the Wikimedia Commons file URL.** Open the painting's Wikipedia article and locate the infobox image. The displayed thumbnail URL looks like `https://upload.wikimedia.org/wikipedia/commons/thumb/X/YY/FILENAME.jpg/500px-FILENAME.jpg`. Strip `/thumb/` and the trailing `/NNNpx-...` segment to get the full-resolution file: `https://upload.wikimedia.org/wikipedia/commons/X/YY/FILENAME.jpg`.
+2. **Download with curl.** Wikimedia requires a descriptive User-Agent. Save as `<artist>_<work>.jpg` in `public/images/` using ASCII snake_case (e.g. `millet_gleaners.jpg`, `raffaello_atene.jpg`). One artist = one prefix.
+   ```bash
+   curl -sSL -A "art-memory-game/1.0 (contact@example.com)" \
+     -o public/images/millet_gleaners.jpg \
+     "https://upload.wikimedia.org/wikipedia/commons/1/1f/Jean-Fran%C3%A7ois_Millet_-_Gleaners_-_Google_Art_Project_2.jpg"
+   ```
+3. **Run `npm run process-images`.** Generates `.webp` + `-thumb.webp`, deletes the downloaded source image, and prints entry templates with `author: "TODO"`, `title: "TODO"`, and auto-detected dimensions. Note the assigned IDs — they are `max(existing id) + 1, +2, ...`.
+4. **Paste the templates into `src/data/artworkData.ts`** and fill in `author` / `title`. Conventions:
+   - `author`: full Japanese name (e.g. `"ジャン=フランソワ・ミレー"`, `"ラファエロ・サンティ"`). The author string is the pair key, so it must match exactly across all works by the same artist.
+   - `title`: Japanese name followed by the original title in parentheses (e.g. `"落穂拾い (Des glaneuses)"`). Japanese-origin works use Japanese only (e.g. `"神奈川沖浪裏"`).
+   - Group entries by artist with a `// 画家名の作品 - 短い説明` comment above the block, matching existing style.
+5. **Keep IDs contiguous.** If you notice a gap (e.g. someone deleted an entry), renumber to close it — IDs aren't referenced from anywhere else, but the file is hand-maintained so gaps invite mistakes.
+6. **Verify with `npm run build`.** The strict `tsc -b` will catch any missing field; biome check runs via `npm run lint`.
 
 ## Styling
 
