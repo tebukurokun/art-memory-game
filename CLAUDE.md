@@ -49,7 +49,7 @@ Use the Fisher–Yates `shuffle` in `src/utils/shuffle.ts`. The file's leading c
 
 Source images live in `public/images/` and are referenced by absolute paths like `/images/foo.webp`. Each `Artwork` needs both a full-size and a `-thumb` variant.
 
-`convert-images.sh` (run manually, from repo root) converts new `.jpg/.jpeg/.png` files in `public/images/` to WebP via `cwebp -q 80`, then generates `-thumb.webp` (max 200×200, q60) via ImageMagick's `convert`. Requires both `cwebp` and `convert` on PATH. After running, you must add matching entries to `artworkData.ts` (including `originalWidth`/`originalHeight`, which `Card.tsx` uses to preserve aspect ratio when fitting into a 220×180 box).
+`npm run process-images` (script in `scripts/process-images.mjs`, uses `sharp`) does both jobs: converts any new `.jpg/.jpeg/.png` in `public/images/` to WebP (q80) + a `-thumb.webp` variant (max 200×200, q60), then scans `artworkData.ts` and prints ready-to-paste entry templates for any WebP that isn't yet registered. Width/height are read from the image; `author` and `title` come out as `"TODO"` for you to fill in. Conversion is idempotent — existing WebPs are skipped. `Card.tsx` uses `originalWidth`/`originalHeight` to preserve aspect ratio when fitting into a 220×180 box.
 
 ## Styling
 
