@@ -138,6 +138,15 @@ export const allArtworkData: Artwork[] = [
     originalWidth: 950,
     originalHeight: 1050,
   },
+  {
+    id: 51,
+    author: "ヨハネス・フェルメール",
+    title: "窓辺で手紙を読む女 (Brieflezend meisje bij het venster)",
+    image: "/images/vermeer_girl_reading_letter.webp",
+    thumbnailImage: "/images/vermeer_girl_reading_letter-thumb.webp",
+    originalWidth: 1370,
+    originalHeight: 1890,
+  },
 
   // ミュシャの作品 - アール・ヌーヴォーのポスター
   {
@@ -157,6 +166,15 @@ export const allArtworkData: Artwork[] = [
     thumbnailImage: "/images/mucha_gismonda-thumb.webp",
     originalWidth: 800,
     originalHeight: 2100,
+  },
+  {
+    id: 49,
+    author: "アルフォンス・ミュシャ",
+    title: "メデア (Médée)",
+    image: "/images/mucha_medea.webp",
+    thumbnailImage: "/images/mucha_medea-thumb.webp",
+    originalWidth: 586,
+    originalHeight: 1734,
   },
 
   // ルノワールの作品 - 印象派、人物画が多い
@@ -178,6 +196,15 @@ export const allArtworkData: Artwork[] = [
     originalWidth: 1400,
     originalHeight: 900,
   },
+  {
+    id: 50,
+    author: "ピエール=オーギュスト・ルノワール",
+    title: "ブージヴァルのダンス (Dance at Bougival)",
+    image: "/images/renoir_dance_bougival.webp",
+    thumbnailImage: "/images/renoir_dance_bougival-thumb.webp",
+    originalWidth: 2301,
+    originalHeight: 4366,
+  },
 
   // 葛飾北斎の作品 - 浮世絵、富嶽三十六景など
   {
@@ -197,6 +224,15 @@ export const allArtworkData: Artwork[] = [
     thumbnailImage: "/images/hokusai_fuji-thumb.webp",
     originalWidth: 1500,
     originalHeight: 1000,
+  },
+  {
+    id: 45,
+    author: "葛飾北斎",
+    title: "尾州不二見原",
+    image: "/images/hokusai_bishu_fujimigahara.webp",
+    thumbnailImage: "/images/hokusai_bishu_fujimigahara-thumb.webp",
+    originalWidth: 4525,
+    originalHeight: 3026,
   },
 
   // 歌川広重の作品 - 東海道五十三次など
@@ -218,6 +254,15 @@ export const allArtworkData: Artwork[] = [
     originalWidth: 900,
     originalHeight: 1300,
   },
+  {
+    id: 46,
+    author: "歌川広重",
+    title: "名所江戸百景・亀戸梅屋舗",
+    image: "/images/hiroshige_kameido_umeyashiki.webp",
+    thumbnailImage: "/images/hiroshige_kameido_umeyashiki-thumb.webp",
+    originalWidth: 4565,
+    originalHeight: 6638,
+  },
 
   // クリムトの作品 - 装飾的な金箔の作品
   {
@@ -237,6 +282,15 @@ export const allArtworkData: Artwork[] = [
     thumbnailImage: "/images/klimt_adele-thumb.webp",
     originalWidth: 1000,
     originalHeight: 1400,
+  },
+  {
+    id: 47,
+    author: "グスタフ・クリムト",
+    title: "エミーリエ・フレーゲの肖像 (Bildnis Emilie Flöge)",
+    image: "/images/klimt_emilie_floge.webp",
+    thumbnailImage: "/images/klimt_emilie_floge-thumb.webp",
+    originalWidth: 3142,
+    originalHeight: 7097,
   },
 
   // ミケランジェロの作品 - システィーナ礼拝堂の天井画
@@ -258,6 +312,15 @@ export const allArtworkData: Artwork[] = [
     originalWidth: 1200,
     originalHeight: 1800,
   },
+  {
+    id: 48,
+    author: "ミケランジェロ・ブオナローティ",
+    title: "エヴァの創造 (Creazione di Eva)",
+    image: "/images/michelangelo_creation_eve.webp",
+    thumbnailImage: "/images/michelangelo_creation_eve-thumb.webp",
+    originalWidth: 1080,
+    originalHeight: 770,
+  },
 
   // 横山大観の作品 - 日本画
   {
@@ -278,6 +341,16 @@ export const allArtworkData: Artwork[] = [
     originalWidth: 1200,
     originalHeight: 1800,
   },
+  {
+    id: 52,
+    author: "横山大観",
+    title: "群青富士",
+    image: "/images/yokoyama_gunjo_fuji.webp",
+    thumbnailImage: "/images/yokoyama_gunjo_fuji-thumb.webp",
+    originalWidth: 4777,
+    originalHeight: 2145,
+  },
+
   // ラファエロの作品 - 盛期ルネサンス
   {
     id: 33,
