@@ -1,9 +1,45 @@
-import React, { useEffect, useState } from "react";
+import type React from "react";
+import { useCallback, useEffect, useState } from "react";
 import { allArtworkData } from "../data/artworkData";
 import { calculateConstrainedSize } from "../hooks/useImageSize";
-import { Artwork } from "../types";
+import type { Artwork } from "../types";
 import { GameInstructions } from "./GameInstructions";
 import { ImageModal } from "./ImageModal";
+
+/**
+ * ランダムに指定された数の画家を選び、各画家から2枚の作品を含むデータセットを作成
+ */
+const selectRandomArtworks = (numPairs: number): Artwork[] => {
+  // 作家ごとに作品をグループ化
+  const artistGroups: { [key: string]: Artwork[] } = {};
+  allArtworkData.forEach((artwork) => {
+    if (!artistGroups[artwork.author]) {
+      artistGroups[artwork.author] = [];
+    }
+    artistGroups[artwork.author].push(artwork);
+  });
+
+  // 少なくとも2枚の作品がある画家のリストを作成
+  const eligibleArtists = Object.keys(artistGroups).filter(
+    (artist) => artistGroups[artist].length >= 2,
+  );
+
+  // ランダムに画家を選ぶ
+  const selectedArtists = [...eligibleArtists]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, numPairs);
+
+  // 各画家から2枚の作品を選ぶ
+  const selected: Artwork[] = [];
+  selectedArtists.forEach((artist) => {
+    const artistWorks = [...artistGroups[artist]]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 2);
+    selected.push(...artistWorks);
+  });
+
+  return selected;
+};
 
 const ArtMemoryGame: React.FC = () => {
   // ゲームの状態
@@ -20,44 +56,8 @@ const ArtMemoryGame: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<Artwork | null>(null);
 
-  /**
-   * ランダムに指定された数の画家を選び、各画家から2枚の作品を含むデータセットを作成
-   */
-  const selectRandomArtworks = (numPairs: number): Artwork[] => {
-    // 作家ごとに作品をグループ化
-    const artistGroups: { [key: string]: Artwork[] } = {};
-    allArtworkData.forEach((artwork) => {
-      if (!artistGroups[artwork.author]) {
-        artistGroups[artwork.author] = [];
-      }
-      artistGroups[artwork.author].push(artwork);
-    });
-
-    // 少なくとも2枚の作品がある画家のリストを作成
-    const eligibleArtists = Object.keys(artistGroups).filter(
-      (artist) => artistGroups[artist].length >= 2
-    );
-
-    // ランダムに画家を選ぶ
-    const selectedArtists = [...eligibleArtists]
-      .sort(() => Math.random() - 0.5)
-      .slice(0, numPairs);
-
-    // 各画家から2枚の作品を選ぶ
-    const selected: Artwork[] = [];
-    selectedArtists.forEach((artist) => {
-      // 画家の作品をランダムに並べ替えて最初の2枚を選択
-      const artistWorks = [...artistGroups[artist]]
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 2);
-      selected.push(...artistWorks);
-    });
-
-    return selected;
-  };
-
   // ゲームの初期化
-  const initializeGame = (numPairs: number = difficulty): void => {
+  const initializeGame = useCallback((numPairs: number): void => {
     // ランダムに画家と作品を選択
     const selected = selectRandomArtworks(numPairs);
     setSelectedArtworks(selected);
@@ -70,29 +70,24 @@ const ArtMemoryGame: React.FC = () => {
     setTurns(0);
     setGameOver(false);
     setLastMatch(null);
-  };
+  }, []);
 
   // 難易度変更ハンドラー
   const handleDifficultyChange = (newDifficulty: number): void => {
     setDifficulty(newDifficulty);
-    initializeGame(newDifficulty);
   };
 
   // 画像クリックでモーダル表示
-  const handleImageClick = (e: React.MouseEvent, card: Artwork): void => {
-    // イベントの伝搬を停止して、カードクリックイベントが発火しないようにする
-    e.stopPropagation();
-    // モーダルに表示する画像を設定
+  const openImageModal = (card: Artwork): void => {
     setSelectedImage(card);
-    // モーダルを開く
     setModalOpen(true);
   };
 
   // モーダルを閉じる
-  const closeModal = (): void => {
+  const closeModal = useCallback((): void => {
     setModalOpen(false);
     setSelectedImage(null);
-  };
+  }, []);
 
   // カードをクリックした時の処理
   const handleCardClick = (index: number): void => {
@@ -152,7 +147,7 @@ const ArtMemoryGame: React.FC = () => {
   // 初回レンダリング時にのみゲームを初期化
   useEffect(() => {
     initializeGame(difficulty);
-  }, []);
+  }, [initializeGame, difficulty]);
 
   // ESCキーでモーダルを閉じる
   useEffect(() => {
@@ -167,7 +162,7 @@ const ArtMemoryGame: React.FC = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [modalOpen]);
+  }, [modalOpen, closeModal]);
 
   return (
     <div className="flex flex-col items-center p-4 bg-gray-100 min-h-screen w-full">
@@ -205,6 +200,7 @@ const ArtMemoryGame: React.FC = () => {
         </div>
 
         <button
+          type="button"
           onClick={() => initializeGame(difficulty)}
           className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition-colors"
         >
@@ -241,57 +237,70 @@ const ArtMemoryGame: React.FC = () => {
               card.originalWidth,
               card.originalHeight,
               MAX_WIDTH,
-              MAX_HEIGHT
+              MAX_HEIGHT,
             );
 
           // スタイルオブジェクト
+          // - width は最大値を MAX_WIDTH に制限し、親セルが狭い時は 100% まで縮む
+          // - aspect-ratio で常にカードの縦横比を維持（heightは自動算出）
           const cardStyle = {
             width: `${cardWidth}px`,
-            height: `${cardHeight}px`,
+            maxWidth: "100%",
+            aspectRatio: `${cardWidth} / ${cardHeight}`,
+          };
+
+          const handleCardActivate = () => {
+            if (isFlipped(index)) {
+              openImageModal(card);
+            } else {
+              handleCardClick(index);
+            }
           };
 
           return (
             <div
               key={card.id}
-              className="cursor-pointer perspective-1000 mb-8 flex flex-col items-center mx-auto"
-              onClick={() => handleCardClick(index)}
+              className="cursor-pointer perspective-1000 mb-8 flex flex-col items-center mx-auto w-full min-w-0"
             >
-              <div
-                style={cardStyle}
-                className="relative transition-all duration-500"
+              <button
+                type="button"
+                onClick={handleCardActivate}
+                className="p-0 m-0 border-0 bg-transparent appearance-none max-w-full"
               >
-                {/* カードの表側（絵画のみ表示） */}
                 <div
-                  className={`absolute w-full h-full flex items-center justify-center border-2 rounded-lg overflow-hidden bg-white transform ${
-                    isFlipped(index)
-                      ? "opacity-100 z-10"
-                      : "opacity-0 z-0 rotateY-180"
-                  }`}
+                  style={cardStyle}
+                  className="relative transition-all duration-500"
                 >
-                  <img
-                    src={card.image}
-                    alt={card.title}
-                    className="w-full h-full object-cover cursor-zoom-in"
-                    title={`${card.title} by ${card.author}`}
-                    onClick={(e) =>
-                      isFlipped(index) && handleImageClick(e, card)
-                    }
-                  />
-                </div>
+                  {/* カードの表側（絵画のみ表示） */}
+                  <div
+                    className={`absolute w-full h-full flex items-center justify-center border-2 rounded-lg overflow-hidden bg-white transform ${
+                      isFlipped(index)
+                        ? "opacity-100 z-10"
+                        : "opacity-0 z-0 rotateY-180"
+                    }`}
+                  >
+                    <img
+                      src={card.image}
+                      alt={card.title}
+                      className="w-full h-full object-cover cursor-zoom-in"
+                      title={`${card.title} by ${card.author}`}
+                    />
+                  </div>
 
-                {/* カードの裏側 */}
-                <div
-                  className={`absolute w-full h-full flex items-center justify-center bg-blue-500 text-white font-bold rounded-lg transform ${
-                    isFlipped(index)
-                      ? "opacity-0 z-0 rotateY-180"
-                      : "opacity-100 z-10"
-                  }`}
-                >
-                  <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-blue-500">
-                    ?
+                  {/* カードの裏側 */}
+                  <div
+                    className={`absolute w-full h-full flex items-center justify-center bg-blue-500 text-white font-bold rounded-lg transform ${
+                      isFlipped(index)
+                        ? "opacity-0 z-0 rotateY-180"
+                        : "opacity-100 z-10"
+                    }`}
+                  >
+                    <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-blue-500">
+                      ?
+                    </div>
                   </div>
                 </div>
-              </div>
+              </button>
 
               {/* 作品名と画家名を表示（マッチした場合のみ） */}
               {matchedPairs.includes(cards[index].author) && (

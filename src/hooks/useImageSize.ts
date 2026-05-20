@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface ImageSize {
   width: number;
@@ -14,7 +14,7 @@ interface ImageSize {
 export const useImageSize = (
   imageUrl: string,
   defaultWidth: number,
-  defaultHeight: number
+  defaultHeight: number,
 ): ImageSize => {
   const [size, setSize] = useState<ImageSize>({
     width: defaultWidth,
@@ -58,7 +58,7 @@ export const calculateConstrainedSize = (
   originalWidth: number,
   originalHeight: number,
   maxWidth: number,
-  maxHeight: number
+  maxHeight: number,
 ): { width: number; height: number } => {
   const aspectRatio = originalWidth / originalHeight;
 

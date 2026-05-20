@@ -1,4 +1,4 @@
-import { Artwork } from "../types";
+import type { Artwork } from "../types";
 
 // 絵画データの例（実際の作品の縦横比を反映した値）
 export const allArtworkData: Artwork[] = [
