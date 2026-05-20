@@ -1,21 +1,81 @@
 @import "tailwindcss";
 
-/* カードの3Dアニメーション用 */
+/* カードの3Dフリップ用ユーティリティ */
 .perspective-1000 {
   perspective: 1000px;
 }
 
-.transform {
-  transition-property: transform;
-  transition-duration: 300ms;
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .rotateY-180 {
   transform: rotateY(180deg);
 }
 
-/* 裏返りアニメーションをスムーズにする */
-.transition-all {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+/* マッチ時の緑グロー */
+@keyframes match-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 16px rgba(34, 197, 94, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}
+.animate-match-pulse {
+  border-radius: 0.5rem;
+  animation: match-pulse 0.9s ease-out;
+}
+
+/* ミスマッチ時の赤いリング + 左右シェイク */
+@keyframes mismatch-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-8px);
+  }
+  40% {
+    transform: translateX(8px);
+  }
+  60% {
+    transform: translateX(-6px);
+  }
+  80% {
+    transform: translateX(6px);
+  }
+}
+.animate-mismatch-shake {
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.75);
+  animation: mismatch-shake 0.5s ease-in-out;
+}
+
+/* マッチ通知バナーの自動フェード（フェードイン→静止→フェードアウト） */
+@keyframes banner-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  10%,
+  85% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+.animate-banner-fade {
+  animation: banner-fade 3s ease-out forwards;
 }

@@ -1,0 +1,6 @@
+export const formatTime = (ms: number): string => {
+  const totalSec = Math.floor(ms / 1000);
+  const mm = String(Math.floor(totalSec / 60)).padStart(2, "0");
+  const ss = String(totalSec % 60).padStart(2, "0");
+  return `${mm}:${ss}`;
+};
