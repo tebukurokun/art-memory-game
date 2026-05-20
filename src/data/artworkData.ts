@@ -364,4 +364,33 @@ export const allArtworkData: Artwork[] = [
     originalWidth: 2485,
     originalHeight: 4096,
   },
+
+  // 伊藤若冲の作品 - 動植綵絵、花鳥画
+  {
+    id: 42,
+    author: "伊藤若冲",
+    title: "群鶏図",
+    image: "/images/jakuchu_gunkeizu.webp",
+    thumbnailImage: "/images/jakuchu_gunkeizu-thumb.webp",
+    originalWidth: 1569,
+    originalHeight: 2695,
+  },
+  {
+    id: 43,
+    author: "伊藤若冲",
+    title: "旭日鳳凰図",
+    image: "/images/jakuchu_kyokujitsu_hoo.webp",
+    thumbnailImage: "/images/jakuchu_kyokujitsu_hoo-thumb.webp",
+    originalWidth: 1124,
+    originalHeight: 1500,
+  },
+  {
+    id: 44,
+    author: "伊藤若冲",
+    title: "雪中鴛鴦図",
+    image: "/images/jakuchu_setchu_oshidori.webp",
+    thumbnailImage: "/images/jakuchu_setchu_oshidori-thumb.webp",
+    originalWidth: 1569,
+    originalHeight: 2695,
+  },
 ];
