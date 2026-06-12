@@ -1,0 +1,24 @@
+{
+  "name": "絵画神経衰弱",
+  "short_name": "絵画神経衰弱",
+  "description": "同じ作者の絵画をペアにして当てる、ブラウザで遊べる絵画神経衰弱ゲームです。",
+  "lang": "ja",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#111827",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
