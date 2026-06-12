@@ -26,7 +26,7 @@ TypeScript is configured strictly (`strict`, `noUnusedLocals`, `noUnusedParamete
 
 Hosted on Cloudflare Pages, connected to this GitHub repo — pushing to `master` triggers an automatic build and deploy. There is no manual deploy step. Production URL: https://art-memory-game.tebukuro.me/
 
-Note: `npm install` on macOS can corrupt `package-lock.json` for other platforms — known npm issues drop cross-platform optional deps (e.g. `@img/sharp-linux-*`, commit 66ac7ab) or nested deps of wasm32 packages (e.g. `@emnapi/*`, commit 9e6705d), which breaks `npm ci` on the Pages build. After any commit that touches `package-lock.json`, run `npm ci --dry-run` to verify the lock file is in sync before pushing; if it isn't, regenerate with `npm install --package-lock-only`.
+Note: `npm install` on macOS can corrupt `package-lock.json` for other platforms — known npm issues drop cross-platform optional deps (e.g. `@img/sharp-linux-*`, commit 66ac7ab) or deps of wasm32 packages (e.g. `@emnapi/*`, commits 9e6705d / 9137391), which breaks `npm ci` on the Pages build. The local npm (11.x) is **not** a reliable validator: npm 11 skips dep checks for optional packages whose platform doesn't match, so `npm ci --dry-run` can pass locally while Pages (npm 10.9.2) fails. Before pushing a `package-lock.json` change, validate with the same npm major as Pages: `npx -y npm@10.9.2 ci --dry-run`. If it reports missing entries, regenerate with `npx -y npm@10.9.2 install --package-lock-only`.
 
 ## Architecture
 
