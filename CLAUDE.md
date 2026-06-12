@@ -26,7 +26,7 @@ TypeScript is configured strictly (`strict`, `noUnusedLocals`, `noUnusedParamete
 
 Hosted on Cloudflare Pages, connected to this GitHub repo — pushing to `master` triggers an automatic build and deploy. There is no manual deploy step. Production URL: https://art-memory-game.tebukuro.me/
 
-Note: `package-lock.json` must keep cross-platform optional deps (e.g. `@img/sharp-linux-*`) — an `npm install` that drops them breaks the Pages build (see commit 66ac7ab).
+Note: `npm install` on macOS can corrupt `package-lock.json` for other platforms — known npm issues drop cross-platform optional deps (e.g. `@img/sharp-linux-*`, commit 66ac7ab) or nested deps of wasm32 packages (e.g. `@emnapi/*`, commit 9e6705d), which breaks `npm ci` on the Pages build. After any commit that touches `package-lock.json`, run `npm ci --dry-run` to verify the lock file is in sync before pushing; if it isn't, regenerate with `npm install --package-lock-only`.
 
 ## Architecture
 
