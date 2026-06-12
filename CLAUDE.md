@@ -22,6 +22,12 @@ Biome is the single source of truth for lint + format (double quotes, 2-space in
 
 TypeScript is configured strictly (`strict`, `noUnusedLocals`, `noUnusedParameters`, `noUncheckedSideEffectImports`). `npm run build` will fail on unused symbols.
 
+## Deploy
+
+Hosted on Cloudflare Pages, connected to this GitHub repo — pushing to `master` triggers an automatic build and deploy. There is no manual deploy step. Production URL: https://art-memory-game.tebukuro.me/
+
+Note: `package-lock.json` must keep cross-platform optional deps (e.g. `@img/sharp-linux-*`) — an `npm install` that drops them breaks the Pages build (see commit 66ac7ab).
+
 ## Architecture
 
 `src/App.tsx` is a thin shell; everything lives under `src/components/ArtMemoryGame.tsx`, which is purely view/layout. **All game state lives in `src/hooks/useMemoryGame.ts`**, which internally composes two smaller hooks:
