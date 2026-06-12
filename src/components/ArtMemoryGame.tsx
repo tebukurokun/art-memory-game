@@ -37,27 +37,27 @@ const ArtMemoryGame: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full bg-[#f4f1ea] text-stone-900">
-      <main className="mx-auto flex w-full max-w-7xl flex-col items-center px-4 py-6 sm:px-6 lg:px-8">
-        <header className="mb-6 w-full border-b border-stone-300/80 pb-5">
+      <main className="mx-auto flex w-full max-w-7xl flex-col items-center px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+        <header className="mb-4 w-full border-b border-stone-300/80 pb-4 sm:mb-6 sm:pb-5">
           <p className="text-xs font-semibold tracking-[0.18em] text-stone-500">
             ART MEMORY GAME
           </p>
           <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-stone-950 sm:text-4xl">
+              <h1 className="text-2xl font-bold text-stone-950 sm:text-4xl">
                 絵画神経衰弱
               </h1>
-              <p className="mt-2 text-sm leading-6 text-stone-600 sm:text-base">
+              <p className="mt-1 text-sm leading-6 text-stone-600 sm:mt-2 sm:text-base">
                 作者でそろえる、静かな展示室のカードゲーム
               </p>
             </div>
-            <p className="text-sm text-stone-500">
+            <p className="hidden text-sm text-stone-500 sm:block">
               作品を開き、同じ画家のペアを見つけます
             </p>
           </div>
         </header>
 
-        <section className="mb-6 flex w-full max-w-6xl flex-col gap-3 rounded border border-stone-300/80 bg-white/70 p-3 shadow-[0_18px_50px_rgba(68,64,60,0.10)] backdrop-blur sm:p-4 lg:flex-row lg:items-stretch lg:justify-between">
+        <section className="mb-4 flex w-full max-w-6xl flex-col gap-3 rounded border border-stone-300/80 bg-white/70 p-3 shadow-[0_18px_50px_rgba(68,64,60,0.10)] backdrop-blur sm:mb-6 sm:p-4 lg:flex-row lg:items-stretch lg:justify-between">
           <StatusBar
             turns={game.turns}
             elapsedMs={game.elapsedMs}
@@ -84,8 +84,8 @@ const ArtMemoryGame: React.FC = () => {
           />
         )}
 
-        <section className="w-full border-t border-stone-300/80 pt-6">
-          <div className="grid w-full grid-cols-2 gap-x-3 gap-y-8 px-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+        <section className="w-full border-t border-stone-300/80 pt-4 sm:pt-6">
+          <div className="grid w-full grid-cols-3 gap-x-2 gap-y-4 px-1 sm:gap-x-3 sm:gap-y-8 lg:grid-cols-4 xl:grid-cols-6">
             {game.cards.map((card, index) => {
               const flipped = game.isFlipped(index);
               const matched = game.isMatched(index);
